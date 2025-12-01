@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI.predictive.model · NBA EV & Edge Scanner</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 16px;
+      background: radial-gradient(circle at top, #020617 0, #020617 35%, #000 100%);
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 1100px;
+      background: #020617;
+      border-radius: 24px;
+      padding: 18px 18px 24px;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .brand-line {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+    }
+
+    .brand-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .title-block h1 {
+      font-size: 22px;
+      margin: 0 0 4px;
+      letter-spacing: 0.03em;
+    }
+
+    .title-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: rgba(52, 211, 153, 0.12);
+      color: #6ee7b7;
+    }
+
+    .title-pill span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+
+    .settings-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .chip-label {
+      font-size: 11px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .pill-input {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #020617;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      font-size: 11px;
+      color: #e5e7eb;
+    }
+
+    .pill-input input {
+      border: none;
+      background: transparent;
+      color: #e5e7eb;
+      width: 80px;
+      font-size: 11px;
+      padding: 2px 0;
+      outline: none;
+      text-align: right;
+    }
+
+    .pill-input span.unit {
+      color: #9ca3af;
+      font-size: 10px;
+    }
+
+    .pill-badge {
+      padding: 4px 10px;
+      font-size: 11px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.6);
+      color: #bfdbfe;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.6fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, #111827 0, #020617 55%);
+      border-radius: 18px;
+      padding: 14px 14px 16px;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.8);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .card-header h2 {
+      font-size: 14px;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-header h2 span.accent {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: #9ca3af;
+    }
+
+    .badge-soft {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(55, 65, 81, 0.5);
+      color: #d1d5db;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 11px;
+    }
+
+    .form-group label {
+      color: #9ca3af;
+      font-size: 11px;
+    }
+
+    .form-group input,
+    .form-group select {
+      border-radius: 9px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      padding: 6px 8px;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .form-group input::placeholder {
+      color: #6b7280;
+    }
+
+    .form-helper {
+      font-size: 10px;
+      color: #6b7280;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .btn-primary {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #022c22;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(34, 197, 94, 0.5);
+    }
+
+    .btn-primary span.icon {
+      font-size: 14px;
+    }
+
+    .btn-ghost {
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 11px;
+      border: 1px dashed rgba(148, 163, 184, 0.6);
+      background: transparent;
+      color: #9ca3af;
+      cursor: pointer;
+    }
+
+    .disclaimer {
+      margin-top: 6px;
+      font-size: 10px;
+      color: #6b7280;
+      border-top: 1px dashed rgba(55, 65, 81, 0.8);
+      padding-top: 6px;
+      line-height: 1.4;
+    }
+
+    .metrics-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 6px;
+      margin-bottom: 2px;
+    }
+
+    @media (max-width: 600px) {
+      .metrics-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .metric-pill {
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 6px 8px;
+      font-size: 11px;
+    }
+
+    .metric-label {
+      font-size: 10px;
+      color: #9ca3af;
+      margin-bottom: 2px;
+    }
+
+    .metric-value {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .metric-sub {
+      font-size: 10px;
+      color: #6b7280;
+      margin-top: 1px;
+    }
+
+    .table-wrapper {
+      margin-top: 6px;
+      border-radius: 14px;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      overflow: hidden;
+      background: radial-gradient(circle at top left, #020617 0, #020617 45%, #020617 100%);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+
+    thead {
+      background: rgba(15, 23, 42, 0.96);
+    }
+
+    th, td {
+      padding: 7px 8px;
+      text-align: left;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      vertical-align: middle;
+    }
+
+    th {
+      font-weight: 500;
+      color: #9ca3af;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr {
+      transition: background 0.15s ease, transform 0.05s ease;
+    }
+
+    tbody tr:hover {
+      background: rgba(15, 23, 42, 0.9);
+      transform: translateY(-1px);
+    }
+
+    .cell-small {
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
+    .edge-positive {
+      color: #4ade80;
+    }
+
+    .edge-negative {
+      color: #f97373;
+    }
+
+    .edge-neutral {
+      color: #e5e7eb;
+    }
+
+    .badge-ev-good {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(22, 163, 74, 0.15);
+      color: #bbf7d0;
+      border: 1px solid rgba(34, 197, 94, 0.7);
+    }
+
+    .badge-ev-okay {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.15);
+      color: #bfdbfe;
+      border: 1px solid rgba(59, 130, 246, 0.7);
+    }
+
+    .badge-ev-bad {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.12);
+      color: #9ca3af;
+      border: 1px solid rgba(75, 85, 99, 0.7);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 18px 12px;
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    .kelly-warning {
+      margin-top: 4px;
+      font-size: 10px;
+      color: #f97373;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand-block">
+        <div class="brand-line">
+          <div class="brand-dot"></div>
+          <div class="brand-name">AI.PREDICTIVE.MODEL</div>
+        </div>
+        <div class="brand-subtitle">NBA · EDGE & EXPECTED VALUE LAB</div>
+      </div>
+
+      <div class="settings-row">
+        <span class="chip-label">GLOBAL SETTINGS</span>
+        <div class="pill-input">
+          <span>Bankroll</span>
+          <input type="number" id="bankrollInput" value="1000" min="0" step="10" />
+          <span class="unit">$</span>
+        </div>
+        <div class="pill-input">
+          <span>Kelly fraction</span>
+          <input type="number" id="kellyFractionInput" value="0.25" min="0" max="1" step="0.05" />
+          <span class="unit">× Kelly</span>
+        </div>
+        <div class="pill-badge" id="riskBadge">Risk: Moderate</div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- LEFT: Add bet / input -->
+      <section class="card">
+        <div class="card-header">
+          <h2>
+            Add potential NBA bet
+            <span class="accent">Moneyline · Line · Totals (Overs/Unders)</span>
+          </h2>
+          <span class="badge-soft">Step 1 · Manual market input</span>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="gameInput">Match / Event</label>
+            <input
+              id="gameInput"
+              type="text"
+              placeholder="e.g. Nuggets @ Pelicans"
+            />
+            <div class="form-helper">Any label that makes sense to you.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="marketTypeInput">Market type</label>
+            <select id="marketTypeInput">
+              <option value="moneyline">Moneyline</option>
+              <option value="line">Line / Spread</option>
+              <option value="total">Total / Overs</option>
+            </select>
+            <div class="form-helper">Choose the primary market type.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="marketInput">Market detail</label>
+            <input
+              id="marketInput"
+              type="text"
+              placeholder="e.g. Nuggets -4.5, Over 227.5, Pelicans ML"
+            />
+            <div class="form-helper">Optional description of line or total.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="lineInput">Line / total number (optional)</label>
+            <input
+              id="lineInput"
+              type="number"
+              step="0.5"
+              placeholder="e.g. 227.5 or -4.5"
+            />
+            <div class="form-helper">For line & totals – purely for your reference.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="oddsInput">Book odds (decimal)</label>
+            <input
+              id="oddsInput"
+              type="number"
+              step="0.01"
+              min="1.01"
+              placeholder="e.g. 1.90"
+            />
+            <div class="form-helper">Use decimal odds (1.90, 2.10, 3.25...).</div>
+          </div>
+
+          <div class="form-group">
+            <label>Model probability</label>
+            <div class="form-helper">
+              Uses a simple NBA historical odds-bucket model to approximate win chances.
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-primary" id="addBetBtn">
+            <span class="icon">➕</span>
+            <span>Add to EV table</span>
+          </button>
+          <button class="btn-ghost" id="clearAllBtn">Clear all bets</button>
+        </div>
+
+        <div class="disclaimer">
+          This lab is for analysis and education. It does <strong>not</strong> guarantee profit.
+          Sports remain highly variable; losing streaks and full bankroll loss are always possible.
+          If you choose to bet, keep stakes small and within what you can comfortably afford to lose.
+        </div>
+      </section>
+
+      <!-- RIGHT: Table / metrics -->
+      <section class="card">
+        <div class="card-header">
+          <h2>
+            EV & edge table
+            <span class="accent">NBA-focused · Uses historical odds buckets</span>
+          </h2>
+          <span class="badge-soft">Step 2 · Scan the edges</span>
+        </div>
+
+        <div class="metrics-strip">
+          <div class="metric-pill" id="metricCount">
+            <div class="metric-label">Tracked bets</div>
+            <div class="metric-value">0</div>
+            <div class="metric-sub">Add a few to see patterns.</div>
+          </div>
+          <div class="metric-pill" id="metricAvgEdge">
+            <div class="metric-label">Average edge</div>
+            <div class="metric-value">0.0%</div>
+            <div class="metric-sub">Model prob vs book implied.</div>
+          </div>
+          <div class="metric-pill" id="metricRisk">
+            <div class="metric-label">Kelly exposure (total)</div>
+            <div class="metric-value">$0.00</div>
+            <div class="metric-sub">Sum of recommended stakes.</div>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Game</th>
+                <th>Market</th>
+                <th>Odds</th>
+                <th>Model Prob</th>
+                <th>Book Prob</th>
+                <th>Edge</th>
+                <th>EV / $1</th>
+                <th>Kelly Stake</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody id="betsTbody">
+              <tr class="empty-state-row">
+                <td colspan="9" class="empty-state">
+                  No bets yet. Add one on the left to see model probability, edge, EV and suggested stake.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="kelly-warning">
+          Kelly is mathematically aggressive. This tool applies a fractional Kelly setting (top right).
+          Many sharp bettors use small fractions (e.g. 0.25× or less) to manage variance and drawdowns.
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const bankrollInput = document.getElementById("bankrollInput");
+    const kellyFractionInput = document.getElementById("kellyFractionInput");
+    const riskBadge = document.getElementById("riskBadge");
+
+    const gameInput = document.getElementById("gameInput");
+    const marketInput = document.getElementById("marketInput");
+    const marketTypeInput = document.getElementById("marketTypeInput");
+    const lineInput = document.getElementById("lineInput");
+    const oddsInput = document.getElementById("oddsInput");
+
+    const addBetBtn = document.getElementById("addBetBtn");
+    const clearAllBtn = document.getElementById("clearAllBtn");
+    const betsTbody = document.getElementById("betsTbody");
+
+    const metricCount = document
+      .getElementById("metricCount")
+      .querySelector(".metric-value");
+    const metricAvgEdge = document
+      .getElementById("metricAvgEdge")
+      .querySelector(".metric-value");
+    const metricRisk = document
+      .getElementById("metricRisk")
+      .querySelector(".metric-value");
+
+    let bets = [];
+
+    function updateRiskBadge() {
+      const frac = parseFloat(kellyFractionInput.value) || 0;
+      let label = "Risk: Low";
+      if (frac >= 0.75) {
+        label = "Risk: Very High";
+      } else if (frac >= 0.5) {
+        label = "Risk: High";
+      } else if (frac >= 0.3) {
+        label = "Risk: Moderate";
+      }
+      riskBadge.textContent = label;
+    }
+
+    function formatPercent(val) {
+      if (!isFinite(val) || isNaN(val)) return "0.0%";
+      return (val * 100).toFixed(1) + "%";
+    }
+
+    function formatMoney(val) {
+      if (!isFinite(val) || isNaN(val)) return "$0.00";
+      return "$" + val.toFixed(2);
+    }
+
+    function formatEV(ev) {
+      if (!isFinite(ev) || isNaN(ev)) return "+0.000";
+      return (ev >= 0 ? "+" : "") + ev.toFixed(3);
+    }
+
+    // Simple NBA-style historical odds buckets:
+    // Maps decimal odds -> typical win probability for that odds range.
+    function getBucketProbForOdds(odds) {
+      if (!odds || odds <= 0) return 0.5;
+
+      // Favourite buckets
+      if (odds < 1.20) return 0.90;
+      if (odds < 1.30) return 0.82;
+      if (odds < 1.40) return 0.76;
+      if (odds < 1.50) return 0.71;
+      if (odds < 1.60) return 0.66;
+      if (odds < 1.70) return 0.61;
+      if (odds < 1.80) return 0.57;
+      if (odds < 1.90) return 0.53;
+      if (odds < 2.00) return 0.49;
+      if (odds < 2.20) return 0.46;
+      if (odds < 2.50) return 0.41;
+      if (odds < 3.00) return 0.36;
+      // Big dogs
+      return 0.30;
+    }
+
+    // Hook for different model treatments if we ever want
+    function getModelProb(odds, marketType) {
+      // For now, we treat moneyline, line and totals the same,
+      // using odds-based buckets. Later we can refine per market type.
+      return getBucketProbForOdds(odds);
+    }
+
+    function recalcAndRender() {
+      const bankroll = parseFloat(bankrollInput.value) || 0;
+      const kellyFraction = parseFloat(kellyFractionInput.value) || 0;
+
+      let totalEdge = 0;
+      let countEdges = 0;
+      let totalKellyStake = 0;
+
+      if (bets.length === 0) {
+        betsTbody.innerHTML = `
+          <tr class="empty-state-row">
+            <td colspan="9" class="empty-state">
+              No bets yet. Add one on the left to see model probability, edge, EV and suggested stake.
+            </td>
+          </tr>
+        `;
+        metricCount.textContent = "0";
+        metricAvgEdge.textContent = "0.0%";
+        metricRisk.textContent = "$0.00";
+        return;
+      }
+
+      let rowsHtml = "";
+
+      bets.forEach((bet, index) => {
+        const odds = bet.odds;
+        const modelProb = bet.modelProb;
+        const impliedProb = odds > 0 ? 1 / odds : 0;
+        const edge = modelProb - impliedProb;
+        const q = 1 - modelProb;
+        const b = Math.max(odds - 1, 0);
+
+        // EV per $1
+        const evPerDollar = modelProb * b - q * 1;
+
+        // Kelly fraction (full Kelly)
+        let kellyFull = 0;
+        if (b > 0) {
+          kellyFull = (b * modelProb - q) / b;
+        }
+
+        let stake = 0;
+        if (kellyFull > 0 && bankroll > 0) {
+          stake = bankroll * kellyFull * kellyFraction;
+        }
+
+        totalKellyStake += stake;
+        totalEdge += edge;
+        countEdges += 1;
+
+        let edgeClass = "edge-neutral";
+        let edgeLabel = "Break-even region";
+        if (edge > 0.001) {
+          edgeClass = "edge-positive";
+          edgeLabel = "Positive edge (model)";
+        } else if (edge < -0.001) {
+          edgeClass = "edge-negative";
+          edgeLabel = "Negative edge (model)";
+        }
+
+        let evBadgeClass = "badge-ev-bad";
+        let evLabel = "Likely –EV (model)";
+        if (evPerDollar > 0.01) {
+          evBadgeClass = "badge-ev-good";
+          evLabel = "Value spot (model)";
+        } else if (evPerDollar > -0.01) {
+          evBadgeClass = "badge-ev-okay";
+          evLabel = "Close to fair price";
+        }
+
+        const noteText =
+          bet.marketType === "moneyline"
+            ? "NBA ML · odds-bucket model"
+            : bet.marketType === "line"
+            ? "NBA line · odds-bucket model"
+            : "NBA total · odds-bucket model";
+
+        const marketTypeLabel =
+          bet.marketType === "moneyline"
+            ? "Moneyline"
+            : bet.marketType === "line"
+            ? "Line / Spread"
+            : "Total / Overs";
+
+        const lineInfo =
+          bet.line !== null && bet.line !== undefined && bet.line !== ""
+            ? `<div class="cell-small">Line/Total: ${bet.line}</div>`
+            : "";
+
+        rowsHtml += `
+          <tr data-index="${index}">
+            <td>
+              <div>${bet.game || "-"}</div>
+              <div class="cell-small">NBA</div>
+            </td>
+            <td>
+              <div>${marketTypeLabel}</div>
+              <div class="cell-small">${bet.market || "-"}</div>
+              ${lineInfo}
+            </td>
+            <td>
+              <div>${odds.toFixed(2)}</div>
+              <div class="cell-small">Decimal odds</div>
+            </td>
+            <td>
+              <div>${formatPercent(modelProb)}</div>
+              <div class="cell-small">Model (historical odds bucket)</div>
+            </td>
+            <td>
+              <div>${formatPercent(impliedProb)}</div>
+              <div class="cell-small">From book odds</div>
+            </td>
+            <td>
+              <div class="${edgeClass}">${formatPercent(edge)}</div>
+              <div class="cell-small">${edgeLabel}</div>
+            </td>
+            <td>
+              <div class="${evBadgeClass}">
+                EV: ${formatEV(evPerDollar)} / $1
+              </div>
+              <div class="cell-small">${evLabel}</div>
+            </td>
+            <td>
+              <div>${formatMoney(stake)}</div>
+              <div class="cell-small">Kelly (fractional)</div>
+            </td>
+            <td>
+              <div class="cell-small">${noteText}</div>
+            </td>
+          </tr>
+        `;
+      });
+
+      betsTbody.innerHTML = rowsHtml;
+      metricCount.textContent = String(bets.length);
+
+      const avgEdge = countEdges > 0 ? totalEdge / countEdges : 0;
+      metricAvgEdge.textContent = formatPercent(avgEdge);
+      metricRisk.textContent = formatMoney(totalKellyStake);
+    }
+
+    function handleAddBet() {
+      const game = gameInput.value.trim();
+      const market = marketInput.value.trim();
+      const marketType = marketTypeInput.value;
+      const lineValueRaw = lineInput.value.trim();
+      const oddsVal = parseFloat(oddsInput.value);
+
+      if (!oddsVal || oddsVal <= 1.0) {
+        alert("Please enter valid decimal odds above 1.00.");
+        return;
+      }
+
+      if (!game) {
+        alert("Please enter a match/event label.");
+        return;
+      }
+
+      const modelProb = getModelProb(oddsVal, marketType);
+      const lineValue = lineValueRaw === "" ? "" : lineValueRaw;
+
+      const bet = {
+        game,
+        market,
+        marketType,
+        line: lineValue,
+        odds: oddsVal,
+        modelProb
+      };
+
+      bets.push(bet);
+
+      // Clear only the market-specific fields; keep bankroll and Kelly.
+      marketInput.value = "";
+      lineInput.value = "";
+      oddsInput.value = "";
+
+      recalcAndRender();
+    }
+
+    function handleClearAll() {
+      if (!bets.length) return;
+      const confirmClear = confirm("Clear all tracked bets?");
+      if (!confirmClear) return;
+      bets = [];
+      recalcAndRender();
+    }
+
+    bankrollInput.addEventListener("input", recalcAndRender);
+    kellyFractionInput.addEventListener("input", () => {
+      updateRiskBadge();
+      recalcAndRender();
+    });
+    addBetBtn.addEventListener("click", handleAddBet);
+    clearAllBtn.addEventListener("click", handleClearAll);
+
+    window.addEventListener("DOMContentLoaded", () => {
+      updateRiskBadge();
+      recalcAndRender();
+    });
+  </script>
+</body>
+</html>
