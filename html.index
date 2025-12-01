@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NBA EV & Edge Scanner (Moneyline · Line · Overs)</title>
+  <title>AI.predictive.model · NBA EV & Edge Scanner</title>
   <style>
     * {
       box-sizing: border-box;
@@ -36,6 +36,41 @@
       gap: 12px;
       margin-bottom: 16px;
       flex-wrap: wrap;
+    }
+
+    .brand-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .brand-line {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+    }
+
+    .brand-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
     }
 
     .title-block h1 {
@@ -405,16 +440,14 @@
 <body>
   <div class="app-shell">
     <header class="app-header">
-      <div class="title-block">
-        <h1>NBA EV & Edge Scanner</h1>
-        <div class="title-pill">
-          <span class="dot"></span>
-          <span>Moneyline · Line · Overs · Educational use only</span>
+      <div class="brand-block">
+        <div class="brand-line">
+          <div class="brand-dot"></div>
+          <div class="brand-name">AI.PREDICTIVE.MODEL</div>
         </div>
-        <div class="subtitle">
-          Focused on NBA. Enter the game, market and odds – we use a simple historical odds model to estimate true win probability, then compare it to book implied.
-        </div>
+        <div class="brand-subtitle">NBA · EDGE & EXPECTED VALUE LAB</div>
       </div>
+
       <div class="settings-row">
         <span class="chip-label">GLOBAL SETTINGS</span>
         <div class="pill-input">
@@ -497,9 +530,9 @@
           </div>
 
           <div class="form-group">
-            <label>Model probability source</label>
+            <label>Model probability</label>
             <div class="form-helper">
-              Based on historical NBA results for similar decimal odds buckets.
+              Uses a simple NBA historical odds-bucket model to approximate win chances.
             </div>
           </div>
         </div>
@@ -513,7 +546,7 @@
         </div>
 
         <div class="disclaimer">
-          This tool is for analysis and education. It does <strong>not</strong> guarantee profit.
+          This lab is for analysis and education. It does <strong>not</strong> guarantee profit.
           Sports remain highly variable; losing streaks and full bankroll loss are always possible.
           If you choose to bet, keep stakes small and within what you can comfortably afford to lose.
         </div>
